@@ -1,15 +1,18 @@
 <template>
   <div class="hello">
-<button @click="modalVisible = true ">Posalji</button>
-<ul v-for="(value, index) in item">   
-      <li>{{ value.title }} <br> {{ value.author }}</li>
-      
-</ul>
+
+
+  <ul v-for="(value, index) in item">   
+      <li>{{ value.title }} <br> {{ value.author }}<br>
+      <button @click="modalVisible = true "><i class="fas fa-play-circle"></i></button>   
+      <img v-bind:src="imgFoto(value.youtubeId)"  alt=""> 
+      </li>  
+  </ul>
 
    <div v-show="modalVisible" id="modal">
     <div class="inside">
       <h1>Da li ste sigurni?</h1>
-      <button @click="modalVisible = false">da</button>
+      <button @click="modalVisible = false">Da</button>
     </div>
    </div>
   </div>
@@ -22,10 +25,12 @@ export default {
   data(){
     return{
       modalVisible: false,
-      item: []
+      item: [],
+      img: '',
+      
     }
   },
-  beforeCreate(){
+   beforeCreate(){
     fetch("https://api.myjson.com/bins/k1gz9")
     .then(response => response.json())
     .then((data) => {
@@ -33,49 +38,33 @@ export default {
     })
   },
   methods:{
-
-  }
-}
-
-
-var youtube = {
-    
-    /**
-     * Expects an argument that is either a youtube URL or a ID,
-     * and returns back the ID.
-     */
-    getIdFromUrl: function(videoIdOrUrl) {
+      getIdFromUrl(videoIdOrUrl) {
         if (videoIdOrUrl.indexOf('http') === 0) {
-            return videoIdOrUrl.split('v=')[1];
+              return videoIdOrUrl.split('v=')[1];
         } else {
             return videoIdOrUrl;
         }
     },
-    
-    /**
-     * Expects an argument that is either a youtube URL or a ID,
-     * and returns back the URL of the thumbnail for that video.
-     */
-    generateThumbnailUrl: function(videoIdOrUrl) {
-        return 'https://i3.ytimg.com/vi/' + youtube.getIdFromUrl(videoIdOrUrl) + '/default.jpg';
+     generateThumbnailUrl(videoIdOrUrl) {
+        return 'https://i3.ytimg.com/vi/' + this.getIdFromUrl(videoIdOrUrl) + '/default.jpg';
     },
 
-    /**
-     * Expects an argument that is either a youtube URL or a ID,
-     * and returns back the URL for that video.
-     */
-    generateWatchUrl: function(videoIdOrUrl) {
-        return 'https://www.youtube.com/watch?v=' + youtube.getIdFromUrl(videoIdOrUrl);
+    generateWatchUrl(videoIdOrUrl) {
+        return 'https://www.youtube.com/watch?v=' + this.getIdFromUrl(videoIdOrUrl);
     },
     
-    /**
-     * Expects an argument that is either a youtube URL or a ID,
-     * and returns back the embed URL for that video.
-     */
-    generateEmbedUrl: function(videoIdOrUrl) {
-        return 'https://www.youtube.com/embed/' + youtube.getIdFromUrl(videoIdOrUrl);
+    generateEmbedUrl(videoIdOrUrl) {
+        return 'https://www.youtube.com/embed/' + this.getIdFromUrl(videoIdOrUrl);
+    },
+       
+    imgFoto(videoIdOrUrl) {
+        console.log(videoIdOrUrl);
+       return this.generateThumbnailUrl(videoIdOrUrl);
     }
-
+  },
+  mounted(){
+   
+  }
 }
 </script>
 
@@ -104,12 +93,30 @@ a {
   justify-content: center;
   align-items: center;
   background: grey;
+  top:0;
+  left: 0;
 }
 ul li {
+  z-index: -1;
   height: 200px;
   width: 250px;
   background:#282a2b;
   color: aliceblue;
+  
+}
+button{
+  border: none;
+  background: transparent;
+  height: 40%;
+  width: 100%;
+  cursor: pointer;
+}
+button i {
+  color: antiquewhite;
+  font-size: 30px;
 }
 
 </style>
+
+
+  
