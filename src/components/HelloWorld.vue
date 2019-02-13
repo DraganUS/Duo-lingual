@@ -1,11 +1,15 @@
 <template>
   <div class="hello">
 
+<button class="language">SRB</button>
+<button class="language">ENG</button>
 
   <ul v-for="(value, index) in item">   
-      <li>{{ value.title }} <br> {{ value.author }}<br>
-      <button @click="modalVisible = true "><i class="fas fa-play-circle"></i></button>   
-      <img v-bind:src="imgFoto(value.youtubeId)"  alt=""> 
+      <li  v-bind:style="{ 'background-image': 'url(' + img + ')' }">
+        <p> {{ value.title }} </p>
+        <button @click="modalVisible = true "><i class="fas fa-play-circle"></i></button>   
+        <p> {{ value.author }} </p>
+        <img v-bind:src="imgFoto(value.youtubeId)"  alt=""> 
       </li>  
   </ul>
 
@@ -31,10 +35,10 @@ export default {
     }
   },
    beforeCreate(){
-    fetch("https://api.myjson.com/bins/k1gz9")
+    fetch("https://api.myjson.com/bins/13mms5")
     .then(response => response.json())
     .then((data) => {
-      this.item = data;
+      this.item = data.videos;
     })
   },
   methods:{
@@ -59,7 +63,8 @@ export default {
        
     imgFoto(videoIdOrUrl) {
         console.log(videoIdOrUrl);
-       return this.generateThumbnailUrl(videoIdOrUrl);
+        this.img = this.generateThumbnailUrl(videoIdOrUrl);
+      //  return this.generateThumbnailUrl(videoIdOrUrl);
     }
   },
   mounted(){
@@ -101,21 +106,34 @@ ul li {
   height: 200px;
   width: 250px;
   background:#282a2b;
-  color: aliceblue;
-  
+  color: #ff5722;
+  padding-top: 10px;
+  font-weight: 800;
+  background-position: center; 
+  background-repeat: no-repeat;
+  background-size: cover;   
 }
 button{
   border: none;
   background: transparent;
-  height: 40%;
-  width: 100%;
+  
+  
   cursor: pointer;
 }
 button i {
-  color: antiquewhite;
+  color: #ff5722;
   font-size: 30px;
 }
-
+.language{
+  border: 1px solid rgb(145, 128, 128);
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 10px; 
+}
+.language:hover{
+  background: #ff5722;
+  color: #fff;
+}
 </style>
 
 
