@@ -1,8 +1,8 @@
 <template>
   <div class="hello">
 
-<button class="language">SRB</button>
-<button class="language">ENG</button>
+<button  @click="createCookie('srbLanguage', 'srb')" class="language">SRB</button>
+<button @click="createCookie('engLanguage', 'eng')" class="language">ENG</button>
 
   <ul v-for="(value, index) in item">   
       <li  v-bind:style="{ 'background-image': 'url(' + img + ')' }">
@@ -66,7 +66,37 @@ export default {
         console.log(videoIdOrUrl);
         this.img = this.generateThumbnailUrl(videoIdOrUrl);
       //  return this.generateThumbnailUrl(videoIdOrUrl);
-    }
+    },
+     createCookie(name, value, days) {
+        value = encodeURIComponent(value);
+        let expires;
+
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = '; expires=' + date.toGMTString();
+        } else {
+            expires = '';
+        }
+
+        document.cookie = name + '=' + value + expires + '; path=/';
+    },
+    readCookie(name) {
+        const nameEQ = name + '=';
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1, c.length);
+            }
+            if (c.indexOf(nameEQ) === 0) {
+                let contents = c.substring(nameEQ.length, c.length);
+                contents = decodeURIComponent(contents);
+                return contents;
+            }
+        }
+        return null;
+    },
   },
   mounted(){
     // From some method in one of your Vue components
