@@ -1,8 +1,8 @@
 <template>
   <div class="hello">
 
-<button  @click="createCookie('srbLanguage', 'srb')" class="language">SRB</button>
-<button @click="createCookie('engLanguage', 'eng')" class="language">ENG</button>
+<button  @click="createCookie('srbLanguage', 'srb'); newVideoSrb()" class="language">SRB</button>
+<button @click="createCookie('engLanguage', 'eng'); newVideoEng()" class="language">ENG</button>
 
   <ul v-for="(value, index) in item">   
       <li  v-bind:style="{ 'background-image': 'url(' + img + ')' }">
@@ -25,7 +25,7 @@
 <script>
 
 export default {
-  name: 'Modal',
+  name: 'HelloWorld',
   data(){
     return{
       modalVisible: false,
@@ -35,14 +35,52 @@ export default {
     }
   },
    beforeCreate(){
-    fetch("https://api.myjson.com/bins/13mms5")
-    .then(response => response.json())
-    .then((data) => {
-      this.item = data.videos;
-    })
-    
+     function readCookie() {
+        const nameEQ = "srbLanguage" + '=';
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1, c.length);
+            }
+            if (c.indexOf(nameEQ) === 0) {
+                let contents = c.substring(nameEQ.length, c.length);
+                contents = decodeURIComponent(contents);
+                return contents;
+            }
+        }
+        return null;
+      }
+     if ( readCookie() === 'srb'){
+       fetch("https://api.myjson.com/bins/99ixh")
+       .then(response => response.json())
+       .then((data) => {
+       this.item = data.videos;
+      })
+    } else{ 
+     fetch("https://api.myjson.com/bins/13mms5")      
+     .then(response => response.json())
+       .then((data) => {
+       this.item = data.videos;
+      })
+    }
   },
   methods:{
+    newVideoSrb(){
+       fetch("https://api.myjson.com/bins/99ixh")
+      .then(response => response.json())
+      .then((data) => {
+      this.item = data.videos;
+     })
+    },
+    newVideoEng(){
+       fetch("https://api.myjson.com/bins/13mms5")
+      .then(response => response.json())
+      .then((data) => {
+      this.item = data.videos;
+     }),
+     console.log(this.readCookie('srbLanguage'))
+    },
       getIdFromUrl(videoIdOrUrl) {
         if (videoIdOrUrl.indexOf('http') === 0) {
               return videoIdOrUrl.split('v=')[1];
@@ -63,11 +101,11 @@ export default {
     },
        
     imgFoto(videoIdOrUrl) {
-        console.log(videoIdOrUrl);
+        // console.log(videoIdOrUrl);
         this.img = this.generateThumbnailUrl(videoIdOrUrl);
       //  return this.generateThumbnailUrl(videoIdOrUrl);
     },
-     createCookie(name, value, days) {
+    createCookie(name, value, days) {
         value = encodeURIComponent(value);
         let expires;
 
@@ -99,16 +137,7 @@ export default {
     },
   },
   mounted(){
-    // From some method in one of your Vue components
-this.$cookie.set('test', 'Hello world!', 1);
-// This will set a cookie with the name 'test' and the value 'Hello world!' that expires in one day
 
-// To get the value of a cookie use
-this.$cookie.get('test');
-
-// To delete a cookie use
-this.$cookie.delete('test');
-   
   }
 }
 </script>
