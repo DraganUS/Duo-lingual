@@ -7,7 +7,7 @@
   <ul v-for="(value, index) in item">   
       <li  v-bind:style="{ 'background-image': 'url(' + img + ')' }">
         <p> {{ value.title }} </p>
-        <button @click="modalVisible = true "><i class="fas fa-play-circle"></i></button>   
+        <button @click="modalVisible = true; playModalVideo(value.youtubeId)"><i class="fas fa-play-circle"></i></button>   
         <p> {{ value.author }} </p>
         <img v-bind:src="imgFoto(value.youtubeId)"  alt=""> 
       </li>  
@@ -15,8 +15,11 @@
 
    <div v-show="modalVisible" id="modal">
     <div class="inside">
-      <h1>Da li ste sigurni?</h1>
-      <button @click="modalVisible = false">Da</button>
+
+      <iframe width="420" height="315"
+      v-bind:src="videosURL">
+      </iframe>
+      <button @click="modalVisible = false"><i class="fas fa-times-circle"></i></button>
     </div>
    </div>
   </div>
@@ -31,6 +34,7 @@ export default {
       modalVisible: false,
       item: [],
       img: '',
+      videosURL: ''
       
     }
   },
@@ -106,6 +110,11 @@ export default {
         this.img = this.generateThumbnailUrl(videoIdOrUrl);
       //  return this.generateThumbnailUrl(videoIdOrUrl);
     },
+    playModalVideo(value){
+      console.log(value);
+      this.videosURL = this.generateEmbedUrl(value);
+    },
+
     createCookie(name, value, days) {
         value = encodeURIComponent(value);
         let expires;
