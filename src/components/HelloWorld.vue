@@ -71,7 +71,8 @@ export default {
       .then(response => response.json())
       .then((data) => {
       this.item = data.videos;
-     })
+     }),
+     document.cookie = "engLanguage= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
     },
     newVideoEng(){
        fetch("https://api.myjson.com/bins/13mms5")
@@ -79,7 +80,7 @@ export default {
       .then((data) => {
       this.item = data.videos;
      }),
-     console.log(this.readCookie('srbLanguage'))
+     document.cookie = "srbLanguage= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
     },
       getIdFromUrl(videoIdOrUrl) {
         if (videoIdOrUrl.indexOf('http') === 0) {
@@ -118,22 +119,6 @@ export default {
         }
 
         document.cookie = name + '=' + value + expires + '; path=/';
-    },
-    readCookie(name) {
-        const nameEQ = name + '=';
-        const ca = document.cookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1, c.length);
-            }
-            if (c.indexOf(nameEQ) === 0) {
-                let contents = c.substring(nameEQ.length, c.length);
-                contents = decodeURIComponent(contents);
-                return contents;
-            }
-        }
-        return null;
     },
   },
   mounted(){
